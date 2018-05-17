@@ -1,0 +1,6 @@
+framework module popOverView {
+  umbrella header "popOverView-umbrella.h"
+
+  export *
+  module * { export * }
+}

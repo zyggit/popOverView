@@ -1,0 +1,12 @@
+platform :ios, '8.0'
+use_frameworks!
+
+target 'popOverView_Example' do
+  pod 'popOverView', :path => '../'
+
+  target 'popOverView_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

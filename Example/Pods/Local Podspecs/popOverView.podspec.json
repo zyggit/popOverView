@@ -1,0 +1,22 @@
+{
+  "name": "popOverView",
+  "version": "0.1.0",
+  "summary": "a popover view for easy use.",
+  "description": "no detail for description,you just to see more detail in demo",
+  "homepage": "https://github.com/zyggit/popOverView.git",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "zygmain@gmail.com": "zygmain@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/zyggit/popOverView.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "popOverView/Classes/**/*"
+}
