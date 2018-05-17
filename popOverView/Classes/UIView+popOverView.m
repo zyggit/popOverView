@@ -131,7 +131,7 @@ static const char *PopoverTapGestureKey = "PopoverTapGestureKey";
         return;
     }
     else if (items.count > (NSInteger)CGRectGetWidth(self.frame)/80) {
-        NSLog(@"Can not be more than %ld items!!!",(NSInteger)CGRectGetWidth(self.frame)/80);
+        NSLog(@"Can not be more than %f items!!!",CGRectGetWidth(self.frame)/80);
         return;
     }
     
