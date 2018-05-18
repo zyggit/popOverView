@@ -153,7 +153,7 @@ static const CGFloat itemHeight = 70;
         
         popover = [[TableViewPopover alloc] initWithFrame:CGRectMake((rect.origin.x+rect.size.width/2-items.count*itemWidth), rect.origin.y, items.count*itemWidth+30, itemHeight)];
         
-        UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, items.count*itemWidth, itemHeight)];
+        UIView *paddingView = [[UIView alloc] initWithFrame:popover.bounds];
         [popover addSubview:paddingView];
         [self addSubview:popover];
         [items enumerateObjectsUsingBlock:^(PopoverItem *obj, NSUInteger idx, BOOL *stop) {
