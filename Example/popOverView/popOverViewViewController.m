@@ -25,11 +25,29 @@
     [btn addTarget:self action:@selector(click:) forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:btn];
     
+    UIButton *btn2 = [[UIButton alloc] initWithFrame:CGRectMake(200, 400, 30, 30)];
+    [btn2 setTitle:@"cl" forState:UIControlStateNormal];
+    btn2.backgroundColor = UIColor.redColor;
+    [btn2 setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [btn2 addTarget:self action:@selector(click:) forControlEvents:UIControlEventTouchDown];
+    [self.view addSubview:btn2];
+    
+    UIButton *btn3 = [[UIButton alloc] initWithFrame:CGRectMake(100, 300, 30, 30)];
+    [btn3 setTitle:@"cl" forState:UIControlStateNormal];
+    btn3.backgroundColor = UIColor.redColor;
+    [btn3 setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [btn3 addTarget:self action:@selector(click3:) forControlEvents:UIControlEventTouchDown];
+    [self.view addSubview:btn3];
+    
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
+    
+}
+    
+- (void)click3:(id)sender {
     
 }
 

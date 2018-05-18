@@ -120,6 +120,7 @@ typedef NS_ENUM(NSInteger,TableViewPopoverDirection) {
 
 
 static const char *PopoverKey = "PopoverKey";
+static const char *PopoverBgKey = "PopoverBgKey";
 static const char *PopoverItemsKey = "PopoverItemsKey";
 static const char *PopoverTapGestureKey = "PopoverTapGestureKey";
 static const CGFloat itemWidth = 45;
@@ -144,7 +145,12 @@ static const CGFloat itemHeight = 70;
         objc_setAssociatedObject(self, PopoverItemsKey, popoverItems, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     TableViewPopover *popover = objc_getAssociatedObject(self, PopoverKey);
+    UIView *popoverBg = objc_getAssociatedObject(self, PopoverBgKey);
     if (popover == nil) {
+        popoverBg = [[UIView alloc] initWithFrame:self.bounds];
+        popoverBg.backgroundColor = [UIColor colorWithWhite:0 alpha:0.0];
+        [self addSubview:popoverBg];
+        
         popover = [[TableViewPopover alloc] initWithFrame:CGRectMake((rect.origin.x+rect.size.width/2-items.count*itemWidth), rect.origin.y, items.count*itemWidth+30, itemHeight)];
         
         UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, items.count*itemWidth, itemHeight)];
@@ -163,6 +169,10 @@ static const CGFloat itemHeight = 70;
         }];
         popover.layer.hidden = YES;
         objc_setAssociatedObject(self, PopoverKey, popover, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(self, PopoverBgKey, popoverBg, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        
+    }else {
+        popover.frame = CGRectMake((rect.origin.x+rect.size.width/2-items.count*itemWidth), rect.origin.y, items.count*itemWidth+30, itemHeight);
     }
     
     CGRect popoverFrame;
@@ -190,6 +200,8 @@ static const CGFloat itemHeight = 70;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(ss_tap:)];
     [self addGestureRecognizer:tap];
     objc_setAssociatedObject(self, PopoverTapGestureKey, tap, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    popoverBg.hidden = NO;
 }
 
 
@@ -212,6 +224,10 @@ static const CGFloat itemHeight = 70;
 - (void)ss_hide {
     TableViewPopover *popover = objc_getAssociatedObject(self, PopoverKey);
     popover.layer.hidden = YES;
+    
+    UIView *popoverBg = objc_getAssociatedObject(self, PopoverBgKey);
+    popoverBg.hidden = YES;
+    
     UITapGestureRecognizer *tap = objc_getAssociatedObject(self, PopoverTapGestureKey);
     [self removeGestureRecognizer:tap];
     objc_setAssociatedObject(self, PopoverTapGestureKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
