@@ -198,6 +198,7 @@ static const CGFloat itemHeight = 70;
 - (void)ss_buttonAction:(PopoverButton *)sender {
     NSArray *popoverItems = objc_getAssociatedObject(self, PopoverItemsKey);
     PopoverItem *popoverItem = popoverItems[sender.tag];
+    popoverItem.index = sender.tag;
     if (popoverItem.handler) {
         popoverItem.handler(popoverItem);
     }

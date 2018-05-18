@@ -12,7 +12,7 @@
 typedef void(^PopoverItemSelectHandler)(PopoverItem *popoverItem);
 
 @interface PopoverItem : NSObject
-
+@property (nonatomic, assign) NSInteger index;
 @property (nonatomic,readonly,  copy) NSString *name;
 @property (nonatomic,readonly,strong) UIImage *image;
 @property (nonatomic,readonly,  copy) PopoverItemSelectHandler handler;
