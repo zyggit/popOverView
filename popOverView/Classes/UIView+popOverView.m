@@ -47,7 +47,7 @@ typedef NS_ENUM(NSInteger,TableViewPopoverDirection) {
 @interface TableViewPopover : UIView
 
 @property (nonatomic,assign) TableViewPopoverDirection direction;
-
+@property(nonatomic,strong) UIColor *toolBarColor;
 @end
 
 
@@ -57,6 +57,7 @@ typedef NS_ENUM(NSInteger,TableViewPopoverDirection) {
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
+        self.toolBarColor = [UIColor colorWithRed:176.0/255.0 green:138.0/255.0 blue:246.0/255.0 alpha:1];
     }
     return self;
 }
@@ -111,7 +112,7 @@ typedef NS_ENUM(NSInteger,TableViewPopoverDirection) {
     [roundPath addLineToPoint:o];
     [roundPath addLineToPoint:CGPointMake(p.x+14, p.y)];
     [roundPath closePath];
-    [[UIColor colorWithRed:0 green:0 blue:0 alpha:0.85] setFill];
+    [self.toolBarColor setFill];
     [roundPath fill];
 }
 
@@ -121,7 +122,8 @@ typedef NS_ENUM(NSInteger,TableViewPopoverDirection) {
 static const char *PopoverKey = "PopoverKey";
 static const char *PopoverItemsKey = "PopoverItemsKey";
 static const char *PopoverTapGestureKey = "PopoverTapGestureKey";
-
+static const CGFloat itemWidth = 45;
+static const CGFloat itemHeight = 79;
 
 @implementation UIView (popOverView)
 
@@ -131,8 +133,8 @@ static const char *PopoverTapGestureKey = "PopoverTapGestureKey";
         NSLog(@"At least one item!!!");
         return;
     }
-    else if (items.count > (NSInteger)CGRectGetWidth(self.frame)/80) {
-        NSLog(@"Can not be more than %f items!!!",CGRectGetWidth(self.frame)/80);
+    else if (items.count > (NSInteger)CGRectGetWidth(self.frame)/itemWidth) {
+        NSLog(@"Can not be more than %f items!!!",CGRectGetWidth(self.frame)/itemWidth);
         return;
     }
     
@@ -143,7 +145,7 @@ static const char *PopoverTapGestureKey = "PopoverTapGestureKey";
     }
     TableViewPopover *popover = objc_getAssociatedObject(self, PopoverKey);
     if (popover == nil) {
-        popover = [[TableViewPopover alloc] initWithFrame:CGRectMake((rect.origin.x-items.count*80)/2 + 37, rect.origin.y, items.count*80, 70)];
+        popover = [[TableViewPopover alloc] initWithFrame:CGRectMake((rect.origin.x+rect.size.width/2-items.count*itemWidth)+30, rect.origin.y, items.count*itemWidth, itemHeight)];
         [self addSubview:popover];
         [items enumerateObjectsUsingBlock:^(PopoverItem *obj, NSUInteger idx, BOOL *stop) {
             PopoverButton *button = [PopoverButton buttonWithType:UIButtonTypeCustom];
@@ -152,7 +154,6 @@ static const char *PopoverTapGestureKey = "PopoverTapGestureKey";
             button.backgroundColor = [UIColor clearColor];
             [button setTitle:obj.name forState:UIControlStateNormal];
             button.titleLabel.font = [UIFont systemFontOfSize:14];
-//            [button setImage:[self ss_imageWithColor:[UIColor whiteColor] image:obj.image] forState:UIControlStateNormal];
             [button setImage:obj.image forState:UIControlStateNormal];
             [button addTarget:self action:@selector(ss_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
             [popover addSubview:button];
@@ -164,7 +165,7 @@ static const char *PopoverTapGestureKey = "PopoverTapGestureKey";
     CGRect popoverFrame;
     TableViewPopoverDirection direction;
     direction = TableViewPopoverDirectionUp;
-    popoverFrame = CGRectMake(popover.frame.origin.x, rect.origin.y-70, CGRectGetWidth(popover.frame), CGRectGetHeight(popover.frame));
+    popoverFrame = CGRectMake(popover.frame.origin.x, rect.origin.y-itemHeight, CGRectGetWidth(popover.frame), CGRectGetHeight(popover.frame));
     
     [self bringSubviewToFront:popover];
     popover.frame = popoverFrame;
@@ -213,20 +214,4 @@ static const char *PopoverTapGestureKey = "PopoverTapGestureKey";
     objc_setAssociatedObject(self, PopoverItemsKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-//Blend image with whitecolor.
-
-- (UIImage *)ss_imageWithColor:(UIColor *)color image:(UIImage *)image {
-    UIGraphicsBeginImageContextWithOptions(image.size, NO, image.scale);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextTranslateCTM(context, 0, image.size.height);
-    CGContextScaleCTM(context, 1.0, -1.0);
-    CGContextSetBlendMode(context, kCGBlendModeNormal);
-    CGRect rect = CGRectMake(0, 0, image.size.width, image.size.height);
-    CGContextClipToMask(context, rect, image.CGImage);
-    [color setFill];
-    CGContextFillRect(context, rect);
-    UIImage*newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newImage;
-}
 @end
