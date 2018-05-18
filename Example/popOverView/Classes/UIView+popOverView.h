@@ -26,8 +26,7 @@ typedef void(^PopoverItemSelectHandler)(PopoverItem *popoverItem);
 
 @interface UIView (popOverView)
 
+
 - (void)showPopoverWithItems:(NSArray <PopoverItem *>*)items
                      forRect:(CGRect )rect;
-
-- (void)ss_hide;
 @end

@@ -111,7 +111,7 @@ typedef NS_ENUM(NSInteger,TableViewPopoverDirection) {
     [roundPath addLineToPoint:o];
     [roundPath addLineToPoint:CGPointMake(p.x+14, p.y)];
     [roundPath closePath];
-    [[UIColor colorWithRed:0 green:0 blue:0 alpha:0.85] setFill];
+    [[UIColor colorWithRed:0 green:0 blue:0 alpha:0.85]setFill];
     [roundPath fill];
 }
 
@@ -124,7 +124,6 @@ static const char *PopoverTapGestureKey = "PopoverTapGestureKey";
 
 
 @implementation UIView (popOverView)
-
 
 - (void)showPopoverWithItems:(NSArray<PopoverItem *> *)items forRect:(CGRect )rect {
     if (items.count <= 0) {
@@ -143,7 +142,7 @@ static const char *PopoverTapGestureKey = "PopoverTapGestureKey";
     }
     TableViewPopover *popover = objc_getAssociatedObject(self, PopoverKey);
     if (popover == nil) {
-        popover = [[TableViewPopover alloc] initWithFrame:CGRectMake((rect.origin.x-items.count*80)/2 + 37, rect.origin.y, items.count*80, 70)];
+        popover = [[TableViewPopover alloc]initWithFrame:CGRectMake((rect.size.width-items.count*80)/2, rect.origin.y, items.count*80, 70)];
         [self addSubview:popover];
         [items enumerateObjectsUsingBlock:^(PopoverItem *obj, NSUInteger idx, BOOL *stop) {
             PopoverButton *button = [PopoverButton buttonWithType:UIButtonTypeCustom];
@@ -163,7 +162,7 @@ static const char *PopoverTapGestureKey = "PopoverTapGestureKey";
     CGRect popoverFrame;
     TableViewPopoverDirection direction;
     direction = TableViewPopoverDirectionUp;
-    popoverFrame = CGRectMake(popover.frame.origin.x, rect.origin.y-70, CGRectGetWidth(popover.frame), CGRectGetHeight(popover.frame));
+    popoverFrame = CGRectMake(popover.frame.origin.x, rect.origin.y-62, CGRectGetWidth(popover.frame), CGRectGetHeight(popover.frame));
     
     [self bringSubviewToFront:popover];
     popover.frame = popoverFrame;

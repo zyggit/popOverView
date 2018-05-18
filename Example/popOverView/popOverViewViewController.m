@@ -7,8 +7,7 @@
 //
 
 #import "popOverViewViewController.h"
-
-
+#import "UIView+popOverView.h"
 
 @interface popOverViewViewController ()
 
@@ -19,7 +18,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
+    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(300, 300, 30, 30)];
+    [btn setTitle:@"cl" forState:UIControlStateNormal];
+    btn.backgroundColor = UIColor.redColor;
+    [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(click:) forControlEvents:UIControlEventTouchDown];
+    [self.view addSubview:btn];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -39,10 +44,10 @@
         }];
         [items addObject:item];
     }
-    //    [tableView showPopoverWithItems:items forIndexPath:indexPath];
+
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-    CGRect rect = [window convertRect:btn.frame fromView:btn];
-    [self.tableView showPopoverWithItems:items forRect:rect];
+    CGRect rect = [window convertRect:btn.frame fromView:self.view];
+    [self.view showPopoverWithItems:items forRect:rect];
 }
 
 @end
