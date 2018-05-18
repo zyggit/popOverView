@@ -123,7 +123,7 @@ static const char *PopoverKey = "PopoverKey";
 static const char *PopoverItemsKey = "PopoverItemsKey";
 static const char *PopoverTapGestureKey = "PopoverTapGestureKey";
 static const CGFloat itemWidth = 45;
-static const CGFloat itemHeight = 79;
+static const CGFloat itemHeight = 70;
 
 @implementation UIView (popOverView)
 
@@ -145,18 +145,21 @@ static const CGFloat itemHeight = 79;
     }
     TableViewPopover *popover = objc_getAssociatedObject(self, PopoverKey);
     if (popover == nil) {
-        popover = [[TableViewPopover alloc] initWithFrame:CGRectMake((rect.origin.x+rect.size.width/2-items.count*itemWidth)+30, rect.origin.y, items.count*itemWidth, itemHeight)];
+        popover = [[TableViewPopover alloc] initWithFrame:CGRectMake((rect.origin.x+rect.size.width/2-items.count*itemWidth), rect.origin.y, items.count*itemWidth+30, itemHeight)];
+        
+        UIView *paddingView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, items.count*itemWidth, itemHeight)];
+        [popover addSubview:paddingView];
         [self addSubview:popover];
         [items enumerateObjectsUsingBlock:^(PopoverItem *obj, NSUInteger idx, BOOL *stop) {
             PopoverButton *button = [PopoverButton buttonWithType:UIButtonTypeCustom];
-            button.frame = CGRectMake(CGRectGetWidth(popover.frame)/items.count *idx, 0, CGRectGetWidth(popover.frame)/items.count, CGRectGetHeight(popover.frame)-8);
+            button.frame = CGRectMake(CGRectGetWidth(popover.frame)/items.count *idx, 4, CGRectGetWidth(popover.frame)/items.count, CGRectGetHeight(popover.frame));
             button.tag = idx;
             button.backgroundColor = [UIColor clearColor];
             [button setTitle:obj.name forState:UIControlStateNormal];
             button.titleLabel.font = [UIFont systemFontOfSize:14];
             [button setImage:obj.image forState:UIControlStateNormal];
             [button addTarget:self action:@selector(ss_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-            [popover addSubview:button];
+            [paddingView addSubview:button];
         }];
         popover.layer.hidden = YES;
         objc_setAssociatedObject(self, PopoverKey, popover, OBJC_ASSOCIATION_RETAIN_NONATOMIC);

@@ -35,8 +35,8 @@
 
 - (void)click:(id)sender {
     UIButton *btn = (UIButton*)sender;
-    NSArray *names = @[@"Reply",@"Share",@"Copy",@"Report"];
-    NSArray *images = @[@"popover_reply",@"popover_share",@"popover_copy",@"popover_report"];
+    NSArray *names = @[@"",@"",@"",@""];
+    NSArray *images = @[@"Image",@"Image",@"Image",@"Image"];
     NSMutableArray *items = [NSMutableArray array];
     for (NSInteger i = 0; i<names.count; i++) {
         PopoverItem *item = [PopoverItem itemWithName:names[i] image:[UIImage imageNamed:images[i]] selectedHandler:^(PopoverItem *popoverItem) {
