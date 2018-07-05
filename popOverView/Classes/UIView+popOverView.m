@@ -123,6 +123,7 @@ static const char *PopoverKey = "PopoverKey";
 static const char *PopoverBgKey = "PopoverBgKey";
 static const char *PopoverItemsKey = "PopoverItemsKey";
 static const char *PopoverTapGestureKey = "PopoverTapGestureKey";
+static const char *PopoverBtnKey = "PopoverTapBtnKey";
 static const CGFloat itemWidth = 45;
 static const CGFloat itemHeight = 70;
 
@@ -146,6 +147,7 @@ static const CGFloat itemHeight = 70;
     }
     TableViewPopover *popover = objc_getAssociatedObject(self, PopoverKey);
     UIView *popoverBg = objc_getAssociatedObject(self, PopoverBgKey);
+    NSMutableArray *popItemArr = [[NSMutableArray alloc] init];
     if (popover == nil) {
         popoverBg = [[UIView alloc] initWithFrame:self.bounds];
         popoverBg.backgroundColor = [UIColor colorWithWhite:0 alpha:0.0];
@@ -160,19 +162,26 @@ static const CGFloat itemHeight = 70;
             PopoverButton *button = [PopoverButton buttonWithType:UIButtonTypeCustom];
             button.frame = CGRectMake(CGRectGetWidth(popover.frame)/items.count *idx, 4, CGRectGetWidth(popover.frame)/items.count, CGRectGetHeight(popover.frame));
             button.tag = idx;
+            button.transform = CGAffineTransformConcat(CGAffineTransformMakeScale(0.5, 0.5), CGAffineTransformMakeTranslation(0, 0));
             button.backgroundColor = [UIColor clearColor];
             [button setTitle:obj.name forState:UIControlStateNormal];
             button.titleLabel.font = [UIFont systemFontOfSize:14];
             [button setImage:obj.image forState:UIControlStateNormal];
             [button addTarget:self action:@selector(ss_buttonAction:) forControlEvents:UIControlEventTouchUpInside];
             [paddingView addSubview:button];
+            [popItemArr addObject:button];
         }];
         popover.layer.hidden = YES;
         objc_setAssociatedObject(self, PopoverKey, popover, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(self, PopoverBtnKey, popItemArr, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         objc_setAssociatedObject(self, PopoverBgKey, popoverBg, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         
     }else {
         popover.frame = CGRectMake((rect.origin.x+rect.size.width/2-items.count*itemWidth), rect.origin.y, items.count*itemWidth+30, itemHeight);
+        popItemArr = objc_getAssociatedObject(self, PopoverBtnKey);
+        [popItemArr enumerateObjectsUsingBlock:^(UIButton *button, NSUInteger idx, BOOL *stop) {
+            button.transform = CGAffineTransformConcat(CGAffineTransformMakeScale(0.5, 0.5), CGAffineTransformMakeTranslation(0, 0));
+        }];
     }
     
     CGRect popoverFrame;
@@ -187,12 +196,20 @@ static const CGFloat itemHeight = 70;
     scaleAnimation.values = @[[NSValue valueWithCATransform3D:CATransform3DIdentity],
                               [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.075, 1.075, 1)],
                               [NSValue valueWithCATransform3D:CATransform3DIdentity]];
-    scaleAnimation.keyTimes = @[@(0),@(0.7),@(1)];
+    scaleAnimation.keyTimes = @[@(1),@(1),@(1)];
+    
+    CABasicAnimation *opAnim = [CABasicAnimation animationWithKeyPath:@"opacity"];
+    opAnim.fromValue = [NSNumber numberWithFloat:0.0];
+    opAnim.toValue = [NSNumber numberWithFloat:1.0];
+    opAnim.cumulative = NO;
+    opAnim.fillMode = kCAFillModeForwards;
+    opAnim.removedOnCompletion = NO;
+    
     CABasicAnimation *hiddenAnimation = [CABasicAnimation animationWithKeyPath:@"hidden"];
     hiddenAnimation.toValue = [NSNumber numberWithBool:NO];
     CAAnimationGroup *groupAnimation = [CAAnimationGroup animation];
-    groupAnimation.animations = @[scaleAnimation,hiddenAnimation];
-    groupAnimation.duration = 0.3;
+    groupAnimation.animations = @[opAnim,hiddenAnimation];
+    groupAnimation.duration = 0.5;
     groupAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
     groupAnimation.repeatCount = 1;
     popover.layer.hidden = NO;
@@ -202,6 +219,19 @@ static const CGFloat itemHeight = 70;
     objc_setAssociatedObject(self, PopoverTapGestureKey, tap, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
     popoverBg.hidden = NO;
+    
+    __block CGFloat afterTime = 0;
+    [popItemArr enumerateObjectsUsingBlock:^(UIButton *btn, NSUInteger idx, BOOL * _Nonnull stop) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(afterTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:20 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                btn.transform = CGAffineTransformIdentity;
+            } completion:^(BOOL finished) {
+                
+            }];
+
+        });
+        afterTime += 0.05;
+    }];
 }
 
 
