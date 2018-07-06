@@ -209,7 +209,7 @@ static const CGFloat itemHeight = 70;
     hiddenAnimation.toValue = [NSNumber numberWithBool:NO];
     CAAnimationGroup *groupAnimation = [CAAnimationGroup animation];
     groupAnimation.animations = @[opAnim,hiddenAnimation];
-    groupAnimation.duration = 0.4;
+    groupAnimation.duration = 0.2;
     groupAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
     groupAnimation.repeatCount = 1;
     popover.layer.hidden = NO;
@@ -223,7 +223,7 @@ static const CGFloat itemHeight = 70;
     __block CGFloat afterTime = 0;
     [popItemArr enumerateObjectsUsingBlock:^(UIButton *btn, NSUInteger idx, BOOL * _Nonnull stop) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(afterTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [UIView animateWithDuration:0.5 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:20 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            [UIView animateWithDuration:0.3 delay:0 usingSpringWithDamping:0.6 initialSpringVelocity:20 options:UIViewAnimationOptionCurveEaseOut animations:^{
                 btn.transform = CGAffineTransformIdentity;
             } completion:^(BOOL finished) {
                 
