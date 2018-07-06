@@ -209,7 +209,7 @@ static const CGFloat itemHeight = 70;
     hiddenAnimation.toValue = [NSNumber numberWithBool:NO];
     CAAnimationGroup *groupAnimation = [CAAnimationGroup animation];
     groupAnimation.animations = @[opAnim,hiddenAnimation];
-    groupAnimation.duration = 0.5;
+    groupAnimation.duration = 0.4;
     groupAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
     groupAnimation.repeatCount = 1;
     popover.layer.hidden = NO;
@@ -230,7 +230,7 @@ static const CGFloat itemHeight = 70;
             }];
 
         });
-        afterTime += 0.05;
+        afterTime += 0.03;
     }];
 }
 
